@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        ::placeholder{color: white;  }
+        ::-ms-input-placeholder{color: red;}
+        
+    </style>
+</head>
+<body>
+    <div class="container vh-100 vw-100" style='background-image: url("images/one.png"); background-size: 100% 100%; background-repeat: no-repeat; ' >
+        <div class="row p-5" >
+            <div id="displayCity" > </div>
+            <div class="col-12 shadow">
+                
+                <input id="cityName" type="text" placeholder="Type city name" onkeyup="cityCheck()" class="col-12 text-white mb-1 fs-5 py-2 bg-dark rounded" style="opacity: 0.7; letter-spacing: 5px; border-color:5px white; text-transform: uppercase;">
+                <p> <small ><b id="cityValidate" style="color: red; letter-spacing: 4px;"> </b></small> </p>
+                <button id="weatherBtn" class="btn btn-lg btn-outline-dark col-12 mt-4 mb-3 shadow-lg fs-1 text-white pb-4 pt-3" style=" border-radius: 50%; letter-spacing: 8px;" > <b> Check Weather </b></button>
+                <div id="displayResult" class="row" > 
+                    <div class=" col-6 rounded shadow-lg mt-3 mx-0 px-0 shadow" style="opacity:1; color:orange"  id="column1"></div> 
+                    <div class="col-6 rounded shadow-lg mt-3 mx-0 px-0 shadow-lg"  style="float: inline-end; opacity:1; color:orange "  id="column2"></div>
+                 </div>
+                 <div id="displayTime" class="fs-5 text-white" style="text-decoration: overline;"> </div>
+            </div>
+        </div>
+    </div>
+   
+    <script>
+        //let location;
+        document.getElementById('weatherBtn').addEventListener('click', ()=>{
+            let city_name ; let time; let date;
+            
+            let ApiKey = '2f57c6c3704f89272bae3358af87527a';
+            let location = cityName.value ;
+            let endpoint = `https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${ApiKey}`
+            console.log(endpoint)
+            fetch(endpoint)
+            .then(response=>response.json())
+            .then(data =>{console.log(data)
+                city_name = data.city.name 
+                column1.innerHTML = ` 
+                                        City: ${data.city.name}  <hr>
+                                         Max Temp:  ${data.list[0].main.temp_max}  <hr>
+                                         Lat: ${data.city.coord.lon}  <hr>
+                                         Pressure: ${data.list[0].main.pressure}  <hr>
+                                         Humidity: ${data.list[0].main.humidity}  <hr>
+                                         Condition: ${data.list[0].weather[0].main}  <hr>  
+                                        `
+
+                 column2.innerHTML =   `
+                                         Temp:${data.list[0].main.temp}   <hr>                  
+                                         Min Temp:  ${data.list[0].main.temp_min}  <hr>
+                                         Long: ${data.city.coord.lat}  <hr>
+                                         Sunrise:${data.city.sunrise}  <hr>
+                                         Sunset:${data.city.sunset}  <hr>                                       
+                                         Description: ${data.list[0].weather[0].description} <hr>
+                                        `  //<img src="${data.list[0].weather[0].icon}" />
+                time = new Date()
+                date = new Date()
+                // displayCity.innerHTML = ` <div class="fs-5 text-white" style="float: inline-start; font-size:50px"> ${data.city.name} </div>`
+                displayTime.innerHTML = `${date.toLocaleDateString()} || ${time.toLocaleTimeString()}` 
+                
+                                    })
+                
+                                                                        })
+
+        function cityCheck()
+        { let location = cityName.value
+          let exp =  /^([a-zA-Z]{3,15})/
+          if(!location.match(exp))
+          {
+            document.getElementById('cityValidate').innerHTML = "Enter valid City name";
+            //document.getElementById('cityName').style.border='5px solid red';
+            document.getElementById('cityName').style.outline='3px solid red';
+            document.getElementById('weatherBtn').disabled = true;
+          }
+          else if (location.match(exp))
+            {
+                document.getElementById('cityName').style.border ="none";
+                document.getElementById('cityName').style.outline='3px solid white';
+                document.getElementById('cityValidate').innerHTML = ""
+                document.getElementById('weatherBtn').disabled = false;
+            }
+        }
+    
+
+
+       
+
+                         
+                                                                            // setInterval(weatherBtn, 1000)
+                            // background-repeat: no-repeat; background: url("skye.jpg"); background-size: 100% 100%;     
+
+
+
+        //                                                                     function getWeather()
+        // { //https://api.openweathermap.org/data/2.5/forecast?q=london&appid=2f57c6c3704f89272bae3358af87527a
+        //     let ApiKey = '2f57c6c3704f89272bae3358af87527a';
+        //     let location = cityName.value ;
+        //     let endpoint = `https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${ApiKey}`
+        //     console.log(endpoint)
+        //     //fetch
+        // }
+
+       // <script href="bootstrap-5.3.2-dist/js/bootstrap.js" rel="java"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    </script>
+</body>
+</html>
